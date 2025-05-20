@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DBHOST: db
+      DBPORT: 5432
+      DBUSER: postgres
+      DBPASSWORD: postgres
+      DBNAME: postgres
+      DBSSLMODE: disable
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
